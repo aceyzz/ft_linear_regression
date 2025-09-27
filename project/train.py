@@ -2,6 +2,9 @@ from __future__ import annotations
 from pathlib import Path
 import math, sys
 
+# bonus?
+BONUS_ENABLED = False
+
 # chemins
 CUR = Path(__file__).parent
 SRC = CUR / "sources"
@@ -18,8 +21,8 @@ from theta_handler import Thetas, save_thetas, load_thetas
 from utils.console import C, ok, info, warn, fail, title
 
 # variantes
-LR = 0.001
-EPOCHS = 500000
+LR = 0.01
+EPOCHS = 50000
 LOGS_EVERY = 1000
 TOLERANCE = 1e-6
 ENABLED_TOL = True
@@ -67,14 +70,16 @@ def main() -> int:
     epochs = EPOCHS
     log_every = LOGS_EVERY
     info(f"lr={lr} epochs={epochs} log_every={log_every}")
+    print()
 
     t0, t1 = 0.0, 0.0
     last = mse(Xn, y, t0, t1)
 
+    print(f"\033[90mStarting training...\033[0m")
     for e in range(1, epochs + 1):
         n0, n1 = step(Xn, y, t0, t1, lr)
         if not (math.isfinite(n0) and math.isfinite(n1)):
-            warn("STOP non-fini → baisse lr")
+            warn("STOP non-fini → baisse le \'lr\' frero")
             break
         # update des thetas
         t0 = n0
@@ -86,7 +91,15 @@ def main() -> int:
             if abs(last - cur) < TOLERANCE and ENABLED_TOL:
                 warn(f"STOP convergé: mse < {TOLERANCE}")
                 break
-            info(f"[{e}/{epochs}] t0={t0:.4f} t1={t1:.4f} mse={cur:.2f}")
+            # log + precision
+            info(
+                f"\033[38;2;75;0;130mtheta0=\033[0m{t0:.4f}\t|  "
+                f"\033[38;2;72;61;139mtheta1=\033[0m{t1:.4f}\t|  "
+                f"\033[38;2;123;104;238mmse=\033[0m{cur:.2f}\t|  "
+                f"\033[38;2;106;90;205mrmse=\033[0m{math.sqrt(cur):.2f}\t|  "
+                f"\033[38;2;148;0;211mR²=\033[0m{1 - cur / (sum((yi - sum(y) / len(y)) ** 2 for yi in y) / len(y)):.4f}  "
+                f"- [{e}/{epochs}]"
+            )
             if cur > last * 10 and last > 0:
                 warn("STOP divergence → baisse le \'lr\' frero")
                 break
@@ -101,6 +114,11 @@ def main() -> int:
     info(f"x_min: {x_min}")
     info(f"x_max: {x_max}")
     ok(f"saved → {DATA_THETA}\n")
+
+    if BONUS_ENABLED:
+        from sources.bonus.graph_handler import render_graph
+        render_graph(data_csv=DATA_CSV, theta_json=DATA_THETA)
+
     return 0
 
 if __name__ == "__main__":

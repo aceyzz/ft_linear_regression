@@ -2,11 +2,16 @@ from __future__ import annotations
 from pathlib import Path
 import sys, math
 
+# bonus?
+BONUS_ENABLED = False
+
 # chemins
 CUR = Path(__file__).parent
 SRC = CUR / "sources"
 sys.path.append(str(CUR))
 sys.path.append(str(SRC))
+
+# data
 DATA_THETA = CUR / "data" / "theta.json"
 
 # import custom
@@ -59,6 +64,11 @@ def main() -> int:
     info(f"Kilométrage: {km:,.0f} km")
     info(f"Prix estimé: {price:,.2f} €")
     print("")
+
+    if BONUS_ENABLED:
+        from sources.bonus.graph_handler import render_graph
+        render_graph(data_csv=CUR/"data/data.csv", theta_json=DATA_THETA, predicted_km=km)
+
     return 0
 
 if __name__ == "__main__":
