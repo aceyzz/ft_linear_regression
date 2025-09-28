@@ -18,6 +18,8 @@ Prédire le prix d’une voiture à partir de son kilométrage avec une **régre
 - [Architecture du repo](#architecture-du-repo)
 - [Choix techniques & limites](#choix-techniques--limites)
 - [Évaluation](#évaluation)
+- [Liens utiles](#liens-utiles)
+- [Grade](#grade)
 
 <br>
 
@@ -154,6 +156,12 @@ project/
 - **Sauvegarde** : `theta0` et `theta1` persistés (plus `x_min/x_max`) ✔️
 - **Prédiction avant training** : renvoie 0 au début si `theta.json` vierge (ou valeurs par défaut) ✔️
 - **Bonus** (si mandatory parfait) : graphiques de données + droite, précision éventuelle, etc. ✔️
+
+<br>
+
+## Liens utiles
+
+Qu'est ce que le Machine Learning par 'Machine Learnia', voir [playlist YouTube](https://www.youtube.com/watch?v=EUD07IiviJg&list=PLO_fdPEVlfKqUF5BPKjGSh7aV9aBshrpY)
 
 <br>
 
